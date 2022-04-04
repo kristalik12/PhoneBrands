@@ -1,5 +1,4 @@
-from email import message
-from email.message import Message
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 import requests
 from loader import dp
 from aiogram import types
@@ -17,3 +16,17 @@ async def go_back(message: types.Message, state: FSMContext):
 async def go_back(message: types.Message, state: FSMContext):
   await message.answer("Telefon Brandlaridan birini tanlang 🔽", reply_markup=brendlar)
   await Product.brand.set()
+
+@dp.message_handler(text="🔙 Ortga", state=Product.amount)
+async def go_back(message: types.Message, state: FSMContext):
+  data = await state.get_data()
+  url = data.get('url_model')
+  response2 = requests.get(url).json()
+  data2 = response2['data']['phones']
+  models = ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+  for model in data2:
+    models.insert(KeyboardButton(text=model["phone_name"]))
+  models.row("🔙 Ortga")
+  await message.answer("Kerakli modelni tanlang 🔽", reply_markup=models)
+  await Product.model.set()
+

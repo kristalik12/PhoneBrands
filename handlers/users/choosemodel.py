@@ -4,6 +4,7 @@ from aiogram import types
 from states.main import Product
 from aiogram.dispatcher import FSMContext
 from random import choice
+from keyboards.default.miqdor import miqdorlar
 
 
 
@@ -31,5 +32,5 @@ async def get_choose_model(message: types.Message, state: FSMContext):
       storage = response2['data']['os']
       # await message.answer_photo(photo=model['image'], caption=f"{model1} haqida {url2}")
       photo = choice(photos)
-      await message.answer_photo(photo=photo, caption=f"<b>{model1}</b>\n\nRelease Date: {release}\nDimension: {dimension}\nOS: {os}\nStorage: {storage}")
-      await Product.model.set()
+      await message.answer_photo(photo=photo, caption=f"<b>{model1}</b>\n\n<b>Release Date:</b> {release}\n<b>Dimension:</b> {dimension}\n<b>OS:</b> {os}\n<b>Storage:</b> {storage}", reply_markup=miqdorlar)
+      await Product.next()
